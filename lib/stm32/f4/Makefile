@@ -23,8 +23,9 @@ PREFIX	?= arm-none-eabi
 # PREFIX		?= arm-elf
 CC		= $(PREFIX)-gcc
 AR		= $(PREFIX)-ar
+# SAH: Switched -mfloat-abi=hard -mfpu=fpv4-sp-d16 to soft
 CFLAGS		= -Os -g -Wall -Wextra -I../../../include -fno-common \
-		  -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 \
+		  -mcpu=cortex-m4 -mthumb -mfloat-abi=soft \
 		  -Wstrict-prototypes \
 		  -ffunction-sections -fdata-sections -MD -DSTM32F4
 # ARFLAGS	= rcsv

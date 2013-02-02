@@ -36,7 +36,8 @@ $(info We seem to be building the example in the source directory. Using local l
 endif
 endif
 
-ARCH_FLAGS      = -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16
+# SAH: Switched -mfloat-abi=hard -mfpu=fpv4-sp-d16 to soft
+ARCH_FLAGS      = -mthumb -mcpu=cortex-m4 -mfloat-abi=soft
 CFLAGS		+= -O0 -g3 -Wall -Wextra -I$(TOOLCHAIN_DIR)/include \
 		   -fno-common $(ARCH_FLAGS) -MD -DLM4F
 LDSCRIPT	?= $(BINARY).ld

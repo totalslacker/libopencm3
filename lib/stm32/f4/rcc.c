@@ -57,6 +57,35 @@ const clock_scale_t hse_8mhz_3v3[CLOCK_3V3_END] =
 	},
 };
 
+const clock_scale_t hse_12mhz_3v3[CLOCK_3V3_END] =
+{
+	{ /* 120MHz */
+		.pllm = 12,
+		.plln = 240,
+		.pllp = 2,
+		.pllq = 5,
+		.hpre = RCC_CFGR_HPRE_DIV_NONE,
+		.ppre1 = RCC_CFGR_PPRE_DIV_4,
+		.ppre2 = RCC_CFGR_PPRE_DIV_2,
+		.power_save = 1,
+		.flash_config = FLASH_ICE | FLASH_DCE | FLASH_LATENCY_3WS,
+		.apb1_frequency = 30000000,
+		.apb2_frequency = 60000000,
+	},
+	{ /* 168MHz */
+		.pllm = 12,
+		.plln = 336,
+		.pllp = 2,
+		.pllq = 7,
+		.hpre = RCC_CFGR_HPRE_DIV_NONE,
+		.ppre1 = RCC_CFGR_PPRE_DIV_4,
+		.ppre2 = RCC_CFGR_PPRE_DIV_2,
+		.flash_config = FLASH_ICE | FLASH_DCE | FLASH_LATENCY_5WS,
+		.apb1_frequency = 42000000,
+		.apb2_frequency = 84000000,
+	},
+};
+
 void rcc_osc_ready_int_clear(osc_t osc)
 {
 	switch (osc) {
