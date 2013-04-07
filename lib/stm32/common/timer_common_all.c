@@ -1,14 +1,9 @@
-/** @defgroup STM32F1xx-timer-file Timers
-
-@ingroup STM32F1xx
-
-@brief <b>libopencm3 STM32 Timers</b>
-
-@version 1.0.0
+/** @addtogroup timer_file
 
 @author @htmlonly &copy; @endhtmlonly 2010 Edward Cheeseman <evbuilder@users.sourceforge.org>
+@author @htmlonly &copy; @endhtmlonly 2011 Stephen Caudle <scaudle@doceme.com>
 
-@date 18 August 2012
+@section  tim_common Notes for All Timers
 
 This library supports the General Purpose and Advanced Control Timers for
 the STM32 series of ARM Cortex Microcontrollers by ST Microelectronics.
@@ -66,6 +61,7 @@ push-pull outputs where the PWM output will appear.
 @todo input capture example
 
 */
+
 /*
  * This file is part of the libopencm3 project.
  *
@@ -97,23 +93,9 @@ push-pull outputs where the PWM output will appear.
 /**@{*/
 
 #include <libopencm3/stm32/timer.h>
+#include <libopencm3/stm32/rcc.h>
 
-#if defined(STM32F1)
 #define ADVANCED_TIMERS (defined (TIM1_BASE) || defined(TIM8_BASE))
-#	include <libopencm3/stm32/f1/rcc.h>
-#elif defined(STM32F2)
-#define ADVANCED_TIMERS (defined (TIM1_BASE) || defined(TIM8_BASE))
-#	include <libopencm3/stm32/f2/timer.h>
-#	include <libopencm3/stm32/f2/rcc.h>
-#elif defined(STM32F4)
-#define ADVANCED_TIMERS (defined (TIM1_BASE) || defined(TIM8_BASE))
-#	include <libopencm3/stm32/f4/timer.h>
-#	include <libopencm3/stm32/f4/rcc.h>
-#elif defined(STM32L1)
-#	include <libopencm3/stm32/l1/rcc.h>
-#else
-#	error "stm32 family not defined."
-#endif
 
 /*---------------------------------------------------------------------------*/
 /** @brief Reset a Timer.
@@ -520,6 +502,9 @@ void timer_set_output_idle_state(u32 timer_peripheral, u32 outputs)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
     	TIM_CR2(timer_peripheral) |= outputs & TIM_CR2_OIS_MASK;
+#else
+	(void)timer_peripheral;
+	(void)outputs;
 #endif
 }
 
@@ -541,6 +526,9 @@ void timer_reset_output_idle_state(u32 timer_peripheral, u32 outputs)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
     	TIM_CR2(timer_peripheral) &= ~(outputs & TIM_CR2_OIS_MASK);
+#else
+	(void)timer_peripheral;
+	(void)outputs;
 #endif
 }
 
@@ -631,6 +619,8 @@ void timer_enable_compare_control_update_on_trigger(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_CR2(timer_peripheral) |= TIM_CR2_CCUS;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -652,6 +642,8 @@ void timer_disable_compare_control_update_on_trigger(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_CR2(timer_peripheral) &= ~TIM_CR2_CCUS;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -672,6 +664,8 @@ void timer_enable_preload_complementry_enable_bits(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_CR2(timer_peripheral) |= TIM_CR2_CCPC;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -691,6 +685,8 @@ void timer_disable_preload_complementry_enable_bits(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_CR2(timer_peripheral) &= ~TIM_CR2_CCPC;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -725,6 +721,9 @@ void timer_set_repetition_counter(u32 timer_peripheral, u32 value)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_RCR(timer_peripheral) = value;
+#else
+	(void)timer_peripheral;
+	(void)value;
 #endif
 }
 
@@ -1383,6 +1382,9 @@ void timer_set_oc_idle_state_set(u32 timer_peripheral, enum tim_oc_id oc_id)
 		TIM_CR2(timer_peripheral) |= TIM_CR2_OIS4;
 		break;
 	}
+#else
+	(void)timer_peripheral;
+	(void)oc_id;
 #endif
 }
 
@@ -1429,6 +1431,9 @@ void timer_set_oc_idle_state_unset(u32 timer_peripheral, enum tim_oc_id oc_id)
 		TIM_CR2(timer_peripheral) &= ~TIM_CR2_OIS4;
 		break;
 	}
+#else
+	(void)timer_peripheral;
+	(void)oc_id;
 #endif
 }
 
@@ -1488,6 +1493,8 @@ void timer_enable_break_main_output(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= TIM_BDTR_MOE;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1507,6 +1514,8 @@ void timer_disable_break_main_output(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) &= ~TIM_BDTR_MOE;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1527,6 +1536,8 @@ void timer_enable_break_automatic_output(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= TIM_BDTR_AOE;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1547,6 +1558,8 @@ void timer_disable_break_automatic_output(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) &= ~TIM_BDTR_AOE;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1565,6 +1578,8 @@ void timer_set_break_polarity_high(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= TIM_BDTR_BKP;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1583,6 +1598,8 @@ void timer_set_break_polarity_low(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) &= ~TIM_BDTR_BKP;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1601,6 +1618,8 @@ void timer_enable_break(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= TIM_BDTR_BKE;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1619,6 +1638,8 @@ void timer_disable_break(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) &= ~TIM_BDTR_BKE;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1641,6 +1662,8 @@ void timer_set_enabled_off_state_in_run_mode(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= TIM_BDTR_OSSR;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1662,6 +1685,8 @@ void timer_set_disabled_off_state_in_run_mode(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) &= ~TIM_BDTR_OSSR;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1682,6 +1707,8 @@ void timer_set_enabled_off_state_in_idle_mode(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= TIM_BDTR_OSSI;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1701,6 +1728,8 @@ void timer_set_disabled_off_state_in_idle_mode(u32 timer_peripheral)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) &= ~TIM_BDTR_OSSI;
+#else
+	(void)timer_peripheral;
 #endif
 }
 
@@ -1722,6 +1751,9 @@ void timer_set_break_lock(u32 timer_peripheral, u32 lock)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= lock;
+#else
+	(void)timer_peripheral;
+	(void)lock;
 #endif
 }
 
@@ -1748,6 +1780,9 @@ void timer_set_deadtime(u32 timer_peripheral, u32 deadtime)
 #if (defined(ADVANCED_TIMERS) && (ADVANCED_TIMERS))
 	if ((timer_peripheral == TIM1) || (timer_peripheral == TIM8))
 		TIM_BDTR(timer_peripheral) |= deadtime;
+#else
+	(void)timer_peripheral;
+	(void)deadtime;
 #endif
 }
 
@@ -1782,29 +1817,6 @@ u32 timer_get_counter(u32 timer_peripheral)
 {
 	return TIM_CNT(timer_peripheral);
 }
-
-/*---------------------------------------------------------------------------*/
-/** @brief Set Timer Option
-
-Set timer options register on TIM2 or TIM5, used for oscillator calibration
-on TIM5 and trigger remapping on TIM2. Only available on F4 and F2.
-
-@param[in] timer_peripheral Unsigned int32. Timer register address base
-@returns Unsigned int32. Option flags.
-*/
-
-#if (defined(STM32F4) || defined(STM32F2))
-void timer_set_option(u32 timer_peripheral, u32 option)
-{
-	if (timer_peripheral == TIM2) {
-		TIM_OR(timer_peripheral) &= ~TIM2_OR_ITR1_RMP_MASK;
-		TIM_OR(timer_peripheral) |= option;
-	} else if (timer_peripheral == TIM5) {
-		TIM_OR(timer_peripheral) &= ~TIM5_OR_TI4_RMP_MASK;
-		TIM_OR(timer_peripheral) |= option;
-	}
-}
-#endif
 
 /*---------------------------------------------------------------------------*/
 /** @brief Set Counter
@@ -1913,7 +1925,7 @@ void timer_ic_set_input(u32 timer_peripheral, enum tim_ic_id ic, enum tim_ic_inp
 	in &= 3;
 
 	if (((ic == TIM_IC2) || (ic == TIM_IC4)) &&
-	    ((in == TIM_IC_IN_TI1) || (in = TIM_IC_IN_TI2))) {
+	    ((in == TIM_IC_IN_TI1) || (in == TIM_IC_IN_TI2))) {
 		/* Input select bits are flipped for these combinations */
 		in ^= 3;
 	}

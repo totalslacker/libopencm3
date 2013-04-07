@@ -47,7 +47,7 @@ struct can_rx_msg {
 struct can_tx_msg can_tx_msg;
 struct can_rx_msg can_rx_msg;
 
-void gpio_setup(void)
+static void gpio_setup(void)
 {
         /* Enable Alternate Function clock. */
 	rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_AFIOEN);
@@ -85,13 +85,14 @@ void gpio_setup(void)
 
 }
 
-void systick_setup(void)
+static void systick_setup(void)
 {
 	/* 72MHz / 8 => 9000000 counts per second */
 	systick_set_clocksource(STK_CTRL_CLKSOURCE_AHB_DIV8);
 
 	/* 9000000/9000 = 1000 overflows per second - every 1ms one interrupt */
-	systick_set_reload(9000);
+	/* SysTick interrupt every N clock pulses: set reload to N-1 */
+	systick_set_reload(8999);
 
 	systick_interrupt_enable();
 
@@ -99,7 +100,7 @@ void systick_setup(void)
 	systick_counter_enable();
 }
 
-void can_setup(void)
+static void can_setup(void)
 {
 	/* Enable peripheral clocks. */
 	rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_AFIOEN);

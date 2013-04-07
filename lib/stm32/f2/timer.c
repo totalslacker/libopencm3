@@ -1,7 +1,25 @@
+/* This file is used for documentation purposes. It does not need
+to be compiled. All source code is in the common area.
+If there is any device specific code required it can be included here,
+in which case this file must be added to the compile list. */
+
+/** @defgroup timer_file Timers
+
+@ingroup STM32F2xx
+
+@brief <b>libopencm3 STM32F2xx Timers</b>
+
+@version 1.0.0
+
+@date 18 August 2012
+
+*/
+
 /*
  * This file is part of the libopencm3 project.
  *
- * Copyright (C) 2012 Karl Palsson <karlp@tweak.net.au>
+ * Copyright (C) 2010 Edward Cheeseman <evbuilder@users.sourceforge.org>
+ * Copyright (C) 2011 Stephen Caudle <scaudle@doceme.com>
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,21 +35,6 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libopencm3/stm32/l1/pwr.h>
-
-void pwr_set_vos_scale(vos_scale_t scale)
-{
-	PWR_CR &= ~(PWR_CR_VOS_MASK);
-	switch (scale) {
-	case RANGE1:
-		PWR_CR |= PWR_CR_VOS_RANGE1;
-		break;
-	case RANGE2:
-		PWR_CR |= PWR_CR_VOS_RANGE2;
-		break;
-	case RANGE3:
-		PWR_CR |= PWR_CR_VOS_RANGE3;
-		break;
-	}
-}
+#include <libopencm3/stm32/timer.h>
+#include <libopencm3/stm32/common/timer_common_f24.h>
 

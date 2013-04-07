@@ -34,17 +34,6 @@ void main(void);
 void blocking_handler(void);
 void null_handler(void);
 
-void WEAK reset_handler(void);
-void WEAK nmi_handler(void);
-void WEAK hard_fault_handler(void);
-void WEAK mem_manage_handler(void);
-void WEAK bus_fault_handler(void);
-void WEAK usage_fault_handler(void);
-void WEAK sv_call_handler(void);
-void WEAK debug_monitor_handler(void);
-void WEAK pend_sv_handler(void);
-void WEAK sys_tick_handler(void);
-
 __attribute__ ((section(".vectors")))
 vector_table_t vector_table = {
 	.initial_sp_value = &_stack,
@@ -66,8 +55,6 @@ vector_table_t vector_table = {
 void WEAK __attribute__ ((naked)) reset_handler(void)
 {
 	volatile unsigned *src, *dest;
-
-	__asm__("MSR msp, %0" : : "r"(&_stack));
 
 	for (src = &_data_loadaddr, dest = &_data; dest < &_edata; src++, dest++)
 		*dest = *src;
