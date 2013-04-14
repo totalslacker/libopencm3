@@ -109,7 +109,7 @@
 #define DBGMCU_BASE			(PPBI_BASE + 0x00042000)
 
 /* FSMC */
-#define FSMC_BASE			(PERIPH_BASE +  0x60000000)
+#define FSMC_BASE			(PERIPH_BASE +  (u32)0x60000000)
 
 /* Device Electronic Signature */
 #define DESIG_FLASH_SIZE_BASE           (INFO_BASE + 0x7e0)
