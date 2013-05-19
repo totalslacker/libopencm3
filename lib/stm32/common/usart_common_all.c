@@ -36,12 +36,10 @@ Devices can have up to 3 USARTs and 2 UARTs.
 /*-----------------------------------------------------------------------------*/
 /** @brief USART Set Baudrate.
 
-The baud rate is computed from the APB high-speed prescaler clock (for USART1)
+The baud rate is computed from the APB high-speed prescaler clock (for USART1/6)
 or the APB low-speed prescaler clock (for other USARTs). These values must
 be correctly set before calling this function (refer to the rcc_clock_setup-*
 functions in RCC).
-
-@todo Add support for USART6 and oversampling in F2/F4
 
 @param[in] usart unsigned 32 bit. USART block register address base @ref usart_reg_base
 @param[in] baud unsigned 32 bit. Baud rate specified in Hz.
@@ -51,24 +49,16 @@ void usart_set_baudrate(u32 usart, u32 baud)
 {
 	u32 clock = rcc_ppre1_frequency;
 
-//#ifdef STM32F1
-	if (usart == USART1) {
-		clock = rcc_ppre2_frequency;
-	}
-#ifdef STM32F4
-	if (usart == USART6) {
-		clock = rcc_ppre2_frequency;
-	}
-#endif
-/* This has to be added for F2 when it get's support for USART6 */
-/*
-#else
+#if defined STM32F2 || defined STM32F4
 	if ((usart == USART1) ||
 	    (usart == USART6)) {
 		clock = rcc_ppre2_frequency;
 	}
+#else
+	if (usart == USART1) {
+		clock = rcc_ppre2_frequency;
+	}
 #endif
-*/
 
 	/*
 	 * Yes it is as simple as that. The reference manual is

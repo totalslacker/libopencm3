@@ -1,6 +1,8 @@
 /*
  * This file is part of the libopencm3 project.
  *
+ * Copyright (C) 2012 Gareth McMullin <gareth@blacksphere.co.nz>
+ *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,11 +17,12 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBOPENCM3_FLASH_H
-#define LIBOPENCM3_FLASH_H
+#include <libopencm3/sam3x/pio.h>
 
-#include <libopencm3/stm32/memorymap.h>
-#include <libopencm3/stm32/common/flash_common_f24.h>
-
-#endif
+void pio_toggle(u32 gpioport, u32 gpios)
+{
+	u32 odsr = PIO_ODSR(gpioport);
+	PIO_CODR(gpioport) = odsr & gpios;
+	PIO_SODR(gpioport) = ~odsr & gpios;
+}
 

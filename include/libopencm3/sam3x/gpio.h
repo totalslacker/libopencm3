@@ -1,6 +1,8 @@
 /*
  * This file is part of the libopencm3 project.
  *
+ * Copyright (C) 2013 Gareth McMullin <gareth@blacksphere.co.nz>
+ *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,11 +17,35 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBOPENCM3_FLASH_H
-#define LIBOPENCM3_FLASH_H
+#ifndef SAM3X_GPIO_H
+#define SAM3X_GPIO_H
 
-#include <libopencm3/stm32/memorymap.h>
-#include <libopencm3/stm32/common/flash_common_f24.h>
+#include <libopencm3/sam3x/pio.h>
+
+/* flags may be or'd together, but only contain one of
+ * GPOUTPUT, PERIPHA and PERIPHB */
+enum gpio_flags {
+	GPIO_FLAG_GPINPUT = 0,
+	GPIO_FLAG_GPOUTPUT = 1,
+	GPIO_FLAG_PERIPHA = 2,
+	GPIO_FLAG_PERIPHB = 3,
+	GPIO_FLAG_OPEN_DRAIN = 4,
+	GPIO_FLAG_PULL_UP = 8,
+};
+
+void gpio_init(u32 gpioport, u32 pins, enum gpio_flags flags);
+
+static inline void gpio_set(u32 gpioport, u32 gpios)
+{
+	PIO_SODR(gpioport) = gpios;
+}
+
+static inline void gpio_clear(u32 gpioport, u32 gpios)
+{
+	PIO_CODR(gpioport) = gpios;
+}
+
+void gpio_toggle(u32 gpioport, u32 gpios);
 
 #endif
 
